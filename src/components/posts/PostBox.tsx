@@ -1,17 +1,28 @@
+import AuthContext from "context/AuthContext";
+import { deleteDoc, doc } from "firebase/firestore";
+import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
+import { useContext } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaRegComment, FaUserCircle } from "react-icons/fa"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify";
 
 interface PostBoxProps {
   post: PostProps;
 }
 
-const handleDelete = () => {
-  
-};
-
 const PostBox = ({ post }: PostBoxProps) => {
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const handleDelete = async () => {
+    const confirm = window.confirm("해당 게시글을 삭제하시겠습니까?");
+    if (confirm) {
+      await deleteDoc(doc(db, "posts", post.id));
+      toast.success("게시글을 삭제했습니다.");
+      navigate('/');
+    }
+  };
   return (
     <div className="post__box" key={post?.id}>
       <Link to={`/posts/${post?.id}`}>
@@ -25,16 +36,18 @@ const PostBox = ({ post }: PostBoxProps) => {
         </div>
       </Link>
       <div className="post__box-footer">
-        {/* post.uid === user.uid 일 때 */}
-        <>
-          <button className="post__delete" onClick={handleDelete}>
-            Delete
-          </button>
-          <button className="post__edit">
-            <Link to={`/posts/edit/${post.id}`}>
-              Edit
-            </Link>
-          </button>
+        {user?.uid === post.uid && (
+          <>
+            <button className="post__delete" onClick={handleDelete}>
+              Delete
+            </button>
+            <button className="post__edit">
+              <Link to={`/posts/edit/${post.id}`}>
+                Edit
+              </Link>
+            </button>
+          </>
+        )}
           <button className="post__likes" onClick={handleDelete}>
             <AiFillHeart />
             {post?.likes || 0}
@@ -45,7 +58,6 @@ const PostBox = ({ post }: PostBoxProps) => {
             </Link>
               {post?.comments?.length || 0}
           </button>
-        </>
       </div>
     </div>
   );

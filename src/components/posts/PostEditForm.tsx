@@ -1,32 +1,41 @@
 import AuthContext from "context/AuthContext";
-import { addDoc, collection } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "firebaseApp";
-import { useContext, useState } from "react";
+import { PostProps } from "pages/home";
+import { useCallback, useEffect, useState } from "react";
 import { FiImage } from "react-icons/fi";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const PostForm = () => {
+const PostEditForm = () => {
   const [content, setContent] = useState<string>("");
-  const { user } = useContext(AuthContext);
+  const [post, setPost] = useState<PostProps | null>(null);
+  const params = useParams();
+  const navigate = useNavigate();
   const handleFileUpload = () => {
 
   };
 
+  const getPost = useCallback(async () => {
+    if (params.id) {
+      const docRef = doc(db, "posts", params.id);
+      const docSnap = await getDoc(docRef);
+      setPost({ ...docSnap?.data() as PostProps, id: docSnap.id });
+      setContent(docSnap?.data()?.content);
+    }
+  }, [params.id])
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await addDoc(collection(db, "posts"), {
-        content: content,
-        createdAt: new Date()?.toLocaleDateString("ko", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit"
-        }),
-        uid: user?.uid,
-        email: user?.email
-      });
-      setContent("");
-      toast.success("게시글을 생성했습니다.");
+      if (post) {
+        const postRef = doc(db, "posts", post?.id);
+        await updateDoc(postRef, {
+          content: content
+        });
+        navigate(`/posts/${post?.id}`);
+        toast.success("게시글을 수정했습니다.");
+      }
     } catch(e: any) {
       console.log(e);
     }
@@ -40,6 +49,10 @@ const PostForm = () => {
     }
   };
 
+  useEffect(() => {
+    if (params.id) getPost();
+  }, [getPost, params.id])
+
   return (
     <form className="post-form" onSubmit={onSubmit}>
       <textarea className="post-form__textarea" required name="content" id="content" placeholder="What is happening?" onChange={onChange} value={content} />
@@ -49,10 +62,10 @@ const PostForm = () => {
         </label>
         <input type="file" name="file-input" accept="image/*" onChange={handleFileUpload} className="hidden"/>
       <input type="submit" 
-      value="Tweet" className="post-form__submit-btn" />
+      value="수정" className="post-form__submit-btn" />
       </div>
     </form>
   );
 };
 
-export default PostForm;
+export default PostEditForm;

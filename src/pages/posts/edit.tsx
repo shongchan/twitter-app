@@ -1,6 +1,8 @@
+import PostEditForm from "components/posts/PostEditForm";
+
 const PostEdit = () => {
   return (
-    <h1>Post Edit Page</h1>
+    <PostEditForm />
   );
 };
 
