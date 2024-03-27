@@ -1,5 +1,6 @@
 import { initializeApp, FirebaseApp, getApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 export let app: FirebaseApp;
 
@@ -17,6 +18,8 @@ try {
 } catch(e) {
   app = initializeApp(firebaseConfig, "app");
 }
+
+export const storage = getStorage(app);
 
 export const db = getFirestore(app);
 

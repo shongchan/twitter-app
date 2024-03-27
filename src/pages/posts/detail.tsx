@@ -5,11 +5,10 @@ import { db } from "firebaseApp";
 import { PostProps } from "pages/home";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { IoIosArrowBack } from 'react-icons/io';
+import PostHeader from "components/posts/Header";
 
 const PostDetail = () => {
   const params = useParams();
-  const navigate = useNavigate();
   const [post, setPost] = useState<PostProps | null>(null);
   
   const getPost = useCallback(async () => {
@@ -27,11 +26,7 @@ const PostDetail = () => {
 
   return (
     <div className="post">
-      <div className="post__header">
-        <button type="button" onClick={() => { navigate(-1) }}>
-          <IoIosArrowBack className="post__header-btn"/>
-        </button>
-      </div>
+      <PostHeader />
       {post ? <PostBox post={post} /> : <Loader />}
     </div>
   );
