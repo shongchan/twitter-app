@@ -101,7 +101,7 @@ const PostBox = ({ post }: PostBoxProps) => {
             {post?.likeCount || 0}
           </button>
           <button className="post__comments">
-            <Link to={`/posts/edit/${post.id}`}>
+            <Link to={`/posts/${post.id}`}>
               <FaRegComment />
             </Link>
               {post?.comments?.length || 0}

@@ -1,4 +1,5 @@
 import HomePage from "pages/home";
+import NotificationsPage from "pages/notification";
 import PostListPage from "pages/posts";
 import PostDetail from "pages/posts/detail";
 import PostEdit from "pages/posts/edit";
@@ -26,7 +27,7 @@ const Router = ({isAuthenticated}: RouterProps) => {
           <Route path="/posts/edit/:id" element={<PostEdit />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/profile/edit" element={<ProfileEdit />} />
-          <Route path="/notifications" element={<SearchPage />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="*" element={<Navigate replace to="/" />} />
 
