@@ -332,7 +332,8 @@ body {
     background-color: $activeBorder;
     color: $white;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: $white;
       color: $activeBorder;
     }
@@ -343,7 +344,8 @@ body {
     background-color: $white;
     color: $activeBorder;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: $activeBorder;
       color: $white;
     }
@@ -534,6 +536,11 @@ body {
   justify-content: space-between;
   align-items: center;
 
+  &__flex {
+    display: flex;
+    gap: 8px;
+  }
+
   &__image {
     border-radius: 50%;
   }
@@ -541,6 +548,16 @@ body {
   &__btn {
     @extend .button;
     background-color: $primaryColor;
+
+    &--language {
+      @extend .button;
+      background-color: $gray;
+
+      &:hover,
+      &:focus {
+        background-color: $grayDark;
+      }
+    }
 
     &:hover,
     &:focus {

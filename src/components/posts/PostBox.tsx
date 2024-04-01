@@ -3,6 +3,7 @@ import AuthContext from "context/AuthContext";
 import { arrayRemove, arrayUnion, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { deleteObject, ref } from "firebase/storage";
 import { db, storage } from "firebaseApp";
+import useTranslation from "hooks/useTranslation";
 import { PostProps } from "pages/home";
 import { useContext } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
@@ -18,6 +19,7 @@ const PostBox = ({ post }: PostBoxProps) => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const imageRef = ref(storage, post?.imageUrl);
+  const t = useTranslation();
 
   const toggleLike = async () => {
     const postRef = doc(db, "posts", post.id);
@@ -87,11 +89,11 @@ const PostBox = ({ post }: PostBoxProps) => {
         {user?.uid === post.uid && (
           <>
             <button className="post__delete" onClick={handleDelete}>
-              Delete
+              {t('BUTTON_DELETE')}
             </button>
             <button className="post__edit">
               <Link to={`/posts/edit/${post.id}`}>
-                Edit
+                {t('BUTTON_EDIT')}
               </Link>
             </button>
           </>
